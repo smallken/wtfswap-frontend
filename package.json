@@ -12,6 +12,7 @@
     "@ant-design/web3": "^1.24.0",
     "@ant-design/web3-wagmi": "^2.11.0",
     "@tanstack/react-query": "^5.81.5",
+    "@uniswap/v3-sdk": "^3.17.1",
     "antd": "^5.26.3",
     "next": "14.0.4",
     "react": "^18",
