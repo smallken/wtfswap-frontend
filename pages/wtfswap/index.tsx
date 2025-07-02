@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import WtfLayout from "../components/WtfLayout";
+import WtfLayout from "../../components/WtfLayout";
 import { Card, Input, Button, Space, Typography } from 'antd';
 import { TokenSelect, type Token } from '@ant-design/web3';
 import { ETH, USDT, USDC } from '@ant-design/web3-assets/tokens';
 import { SwapOutlined } from '@ant-design/icons';
-import styles from '../components/WtfLayout/styles.module.css';
-
+import styles from '../css/styles.module.css';
 const { Text } = Typography;
 
 export default function Wtfswap() {

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Flex, Table, Space, Typography, Button, Tooltip, message, Tag, Popover } from "antd";
 import { CopyOutlined } from "@ant-design/icons";
-import WtfLayout from "../components/WtfLayout";
+import WtfLayout from "../../components/WtfLayout";
 import Link from "next/link";
-import styles from "./pool.module.css";
+import styles from "../css/pool.module.css";
 import type { TableProps } from "antd";
-import AddPoolModal from "../components/AddPoolModal";
-import { AddressWithCopy, BigNumberWithCopy } from "../components/common";
+import AddPoolModal from "../../components/AddPoolModal";
+import { AddressWithCopy, BigNumberWithCopy } from "../../components/common";
 
 // 优化组件：地址显示+复制按钮
 // const AddressWithCopy = ({ address }: { address: string }) => {

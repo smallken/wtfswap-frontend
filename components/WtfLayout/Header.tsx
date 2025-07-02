@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ConnectButton, Connector } from "@ant-design/web3";
-import styles from "./styles.module.css";
+import styles from "../../pages/css/styles.module.css";
 
 export default function WtfHeader() {
   const pathname = usePathname();

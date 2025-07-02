@@ -1,9 +1,9 @@
 import React from "react";
 import { Flex, Table, Space, Typography, Button } from "antd";
 import type { TableProps } from "antd";
-import WtfLayout from "../components/WtfLayout";
-import AddPositionModal from "../components/AddPositionModal";
-import styles from "./positions.module.css";
+import WtfLayout from "../../components/WtfLayout";
+import AddPositionModal from "../../components/AddPositionModal";
+import styles from "../css/positions.module.css";
 // import { AddressWithCopy, BigNumberWithCopy } from "../components/common";
 
 const columns: TableProps["columns"] = [

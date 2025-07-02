@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "./Header";
-import styles from "./styles.module.css";
+import styles from "../../pages/css/styles.module.css";
  import {
    MetaMask,
    OkxWallet,
