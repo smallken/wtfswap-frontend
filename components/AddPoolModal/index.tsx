@@ -1,3 +1,10 @@
+// @ts-ignore
+globalThis.import_meta = globalThis.import_meta || {};
+// @ts-ignore
+globalThis.import_meta.webpackHot = globalThis.import_meta.webpackHot || {
+  accept: () => {}
+};
+
 import { Modal, Form, Input, InputNumber, Select } from "antd";
 import { parsePriceToSqrtPriceX96 } from "@/utils/common";
 
