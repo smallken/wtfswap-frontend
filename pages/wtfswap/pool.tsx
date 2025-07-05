@@ -7,11 +7,13 @@ import styles from "../css/pool.module.css";
 import type { TableProps } from "antd";
 import AddPoolModal from "../../components/AddPoolModal";
 import { AddressWithCopy, BigNumberWithCopy } from "../../components/common";
+import { useReadPoolManagerGetAllPools, useWritePoolManagerCreateAndInitializePoolIfNecessary } from "@/utils/contracts";
+import { getContractAddress } from "@/utils/common";
 
-// 优化组件：地址显示+复制按钮
+// 优化组件：地址显示复制按钮
 // const AddressWithCopy = ({ address }: { address: string }) => {
 //   const [copied, setCopied] = useState(false);
-  
+
 //   const handleCopy = (e: React.MouseEvent) => {
 //     e.stopPropagation();
 //     navigator.clipboard.writeText(address).then(() => {
@@ -20,9 +22,9 @@ import { AddressWithCopy, BigNumberWithCopy } from "../../components/common";
 //       setTimeout(() => setCopied(false), 2000);
 //     });
 //   };
-  
+
 //   const shortenedAddress = `${address.slice(0, 6)}...${address.slice(-4)}`;
-  
+
 //   return (
 //     <Flex align="center" gap={8}>
 //       <Tooltip title={address}>
@@ -43,10 +45,10 @@ import { AddressWithCopy, BigNumberWithCopy } from "../../components/common";
 //   );
 // };
 
-// 优化组件：大数字格式化+复制按钮
+// 优化组件：大数字格式化复制按钮
 // const BigNumberWithCopy = ({ value }: { value: bigint }) => {
 //   const [copied, setCopied] = useState(false);
-  
+
 //   const handleCopy = (e: React.MouseEvent) => {
 //     e.stopPropagation();
 //     navigator.clipboard.writeText(value.toString()).then(() => {
@@ -55,12 +57,12 @@ import { AddressWithCopy, BigNumberWithCopy } from "../../components/common";
 //       setTimeout(() => setCopied(false), 2000);
 //     });
 //   };
-  
+
 //   // 科学记数法格式化
 //   // const formattedValue = (() => {
 //   //   const str = value.toString();
 //   //   if (str.length <= 10) return str;
-    
+
 //   //   return (
 //   //     <span className={styles.numberNotation}>
 //   //       {str.slice(0, 3)}
@@ -71,7 +73,7 @@ import { AddressWithCopy, BigNumberWithCopy } from "../../components/common";
 //   //     </span>
 //   //   );
 //   // })();
-  
+
 //   return (
 //     <Flex align="center" gap={8}>
 //       <Tooltip title={value.toString()}>
@@ -149,42 +151,12 @@ const columns: TableProps["columns"] = [
 
 const PoolListTable: React.FC = () => {
   const [openAddPoolModal, setOpenAddPoolModal] = React.useState(false);
-  const data = [
-    {
-      token0: "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
-      token1: "0xEcd0D12E21805803f70de03B72B1C162dB0898d9",
-      index: 0,
-      fee: 3000,
-      feeProtocol: 0,
-      tickLower: -100000,
-      tickUpper: 100000,
-      tick: 1000,
-      sqrtPriceX96: BigInt("7922737261735934252089901697281"),
-    },
-    {
-      token0: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-      token1: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
-      index: 1,
-      fee: 500,
-      feeProtocol: 1,
-      tickLower: -50000,
-      tickUpper: 50000,
-      tick: 500,
-      sqrtPriceX96: BigInt("18446744073709551615"),
-    },
-    {
-      token0: "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
-      token1: "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
-      index: 2,
-      fee: 10000,
-      feeProtocol: 2,
-      tickLower: -200000,
-      tickUpper: 200000,
-      tick: 1500,
-      sqrtPriceX96: BigInt("79228162514264337593543950336"),
-    },
-  ];
-  
+  const [loading, setLoading] = React.useState(false);
+  const { data = [], refetch } = useReadPoolManagerGetAllPools({
+    address: getContractAddress("PoolManager"),
+  });
+  const { writeContractAsync } =
+    useWritePoolManagerCreateAndInitializePoolIfNecessary();
   return (
     <><Table
       title={() => (
@@ -193,14 +165,18 @@ const PoolListTable: React.FC = () => {
             Pool List
           </Typography.Title>
           <Space>
+            <Link href="/wtfswap/debug">
+              <Button>Get Test Coins</Button>
+            </Link>
             <Link href="/wtfswap/positions">
               <Button>My Positions</Button>
             </Link>
             <Button
               type="primary"
+              loading={loading}
               onClick={() => {
                 setOpenAddPoolModal(true);
-              } }
+              }}
             >Add Pool</Button>
           </Space>
         </Flex>
@@ -210,16 +186,72 @@ const PoolListTable: React.FC = () => {
       pagination={false}
       size="middle"
       className={styles.table} />
-      
+
       <AddPoolModal
         open={openAddPoolModal}
         onCancel={() => {
           setOpenAddPoolModal(false);
-        } }
-        onCreatePool={(createPram) => {
-          console.log("get createPram", createPram);
+        }}
+        onCreatePool={async (createParams) => {
+          console.log("get createPram", createParams);
+          //在提交前排序代币地址
+          const sortedTokens = [createParams.token0, createParams.token1]
+            .map(addr => addr.toLowerCase())
+            .sort();
+
+          const sortedParams = {
+            ...createParams,
+            token0: sortedTokens[0] as `0x${string}`,
+            token1: sortedTokens[1] as `0x${string}`
+          };
+          setLoading(true);
           setOpenAddPoolModal(false);
-        } } /></>
+          console.log("in writeContractAsync");
+          try {
+            const result = await writeContractAsync({
+              address: getContractAddress("PoolManager"),
+              args: [
+                {
+                  token0: createParams.token0,
+                  token1: createParams.token1,
+                  fee: createParams.fee,
+                  tickLower: createParams.tickLower,
+                  tickUpper: createParams.tickUpper,
+                  sqrtPriceX96: createParams.sqrtPriceX96,
+                },
+              ],
+            });
+            console.log("Transaction result:", result);
+            message.success("Create Pool Success If Necessary");
+            refetch();
+          } catch (error: any) {
+            console.error("Error creating pool:", error);
+
+            // 提取更详细的错误信息
+            let errorMessage = error.message;
+
+            if (error.cause) {
+              if (error.cause.shortMessage) {
+                errorMessage = error.cause.shortMessage;
+              } else if (error.cause.message) {
+                errorMessage = error.cause.message;
+              }
+            }
+
+            if (errorMessage.includes("revert")) {
+              // 尝试解析 revert 原因
+              const revertMatch = errorMessage.match(/reverted with reason string '(.*?)'/);
+              if (revertMatch && revertMatch[1]) {
+                errorMessage = `Transaction reverted: ${revertMatch[1]}`;
+              } else {
+                errorMessage = "Transaction reverted without reason";
+              }
+            }
+            message.error(`Failed to create pool: ${errorMessage}`);
+          } finally {
+            setLoading(false);
+          }
+        }} /></>
 
   );
 };
