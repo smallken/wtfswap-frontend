@@ -152,9 +152,17 @@ const columns: TableProps["columns"] = [
 const PoolListTable: React.FC = () => {
   const [openAddPoolModal, setOpenAddPoolModal] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  // const { data = [], refetch } = useReadPoolManagerGetAllPools({
+  //   address: getContractAddress("PoolManager"),
+  // });
   const { data = [], refetch } = useReadPoolManagerGetAllPools({
     address: getContractAddress("PoolManager"),
+
   });
+
+
+  // 在 PoolListTable 组件中添加调试信息
+  console.log("Contract address:", getContractAddress("PoolManager"));
   const { writeContractAsync } =
     useWritePoolManagerCreateAndInitializePoolIfNecessary();
   return (
@@ -195,15 +203,15 @@ const PoolListTable: React.FC = () => {
         onCreatePool={async (createParams) => {
           console.log("get createPram", createParams);
           //在提交前排序代币地址
-          const sortedTokens = [createParams.token0, createParams.token1]
-            .map(addr => addr.toLowerCase())
-            .sort();
+          // const sortedTokens = [createParams.token0, createParams.token1]
+          //   .map(addr => addr.toLowerCase())
+          //   .sort();
 
-          const sortedParams = {
-            ...createParams,
-            token0: sortedTokens[0] as `0x${string}`,
-            token1: sortedTokens[1] as `0x${string}`
-          };
+          // const sortedParams = {
+          //   ...createParams,
+          //   token0: sortedTokens[0] as `0x${string}`,
+          //   token1: sortedTokens[1] as `0x${string}`
+          // };
           setLoading(true);
           setOpenAddPoolModal(false);
           console.log("in writeContractAsync");

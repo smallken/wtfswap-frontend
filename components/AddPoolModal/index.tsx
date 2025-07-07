@@ -5,7 +5,7 @@ globalThis.import_meta.webpackHot = globalThis.import_meta.webpackHot || {
   accept: () => {}
 };
 
-import { Modal, Form, Input, InputNumber, Select, Typography } from "antd";
+import { Modal, Form, Input, InputNumber, Select, Typography, message } from "antd";
 import { parsePriceToSqrtPriceX96 } from "@/utils/common";
 import { useState } from "react";
 
@@ -62,14 +62,15 @@ export default function AddPoolModal(props: AddPoolModalProps) {
       open={open}
       onCancel={onCancel}
       okText="Create"
-      onOk={() => {
-        form.validateFields().then((values) => {
-          // 将输入的价格字符串转换为浮点数
-          const priceValue = parseFloat(priceInput || "0");
-          
+      onOk={async () => {
+        const values = await form.validateFields().then((values) => {
+          if (values.token0 >= values.token1) {
+            message.error("Token0 should be less than Token1");
+            return false;
+          }
           onCreatePool({
             ...values,
-            sqrtPriceX96: parsePriceToSqrtPriceX96(priceValue),
+            sqrtPriceX96: parsePriceToSqrtPriceX96(values.price),
           });
         });
       }}
@@ -94,7 +95,7 @@ export default function AddPoolModal(props: AddPoolModalProps) {
         <Form.Item required label="Tick Upper" name="tickUpper">
           <InputNumber style={{ width: '100%' }} />
         </Form.Item>
-        <Form.Item 
+        {/* <Form.Item 
           required 
           label="Init Price (token1/token0)" 
           name="price"
@@ -125,6 +126,9 @@ export default function AddPoolModal(props: AddPoolModalProps) {
         </Form.Item>
         <Form.Item help="Enter the price as a large number (e.g., 1 token = 1000000000000000000)">
           {/* 帮助文本 */}
+        {/* </Form.Item>  */}
+        <Form.Item required label="Init Price(token1/token0)" name="price">
+          <InputNumber min={0.000001} max={1000000} />
         </Form.Item>
       </Form>
     </Modal>
