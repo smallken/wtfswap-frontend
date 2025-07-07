@@ -1,7 +1,31 @@
 import { encodeSqrtRatioX96 } from "@uniswap/v3-sdk";
+import type { Token } from "@ant-design/web3";
+import { Hardhat, Sepolia, Localhost} from "@ant-design/web3-wagmi";
 
 export const parsePriceToSqrtPriceX96 = (price: number): BigInt => {
   return BigInt(encodeSqrtRatioX96(price * 1000000, 1000000).toString());
+};
+
+export const getTokenInfo = (address: string): Token => {
+  if (builtInTokens[address]) {
+    return builtInTokens[address];
+  }
+  return {
+    icon: null,
+    symbol: address.slice(-3).toUpperCase(),
+    decimal: 18,
+    name: address,
+    availableChains: [
+      {
+        chain: Hardhat,
+        contract: address,
+      },
+      {
+        chain: Sepolia,
+        contract: address,
+      },
+    ],
+  };
 };
 /**
 Wtfswap#PoolManager - 0x5FbDB2315678afecb367f032d93F642f64180aa3
@@ -66,4 +90,57 @@ export const getContractAddress = (
       : "0x0165878A594ca255338adfa4d48449f69242Eb8F";
   }
   throw new Error("Invalid contract");
+};
+
+
+const builtInTokens: Record<string, Token> = {
+  "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9": {
+    icon: null,
+    symbol: "DRG",
+    decimal: 18,
+    name: "Dragon",
+    availableChains: [
+      {
+        chain: Localhost,
+        contract: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+      },
+    ],
+  },
+  "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707": {
+    icon: null,
+    symbol: "USDT",
+    decimal: 18,
+    name: "Tether USD",
+    availableChains: [
+      {
+        chain: Localhost,
+        contract: "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+      },
+    ],
+  },
+  "0x0165878A594ca255338adfa4d48449f69242Eb8F": {
+    icon: null,
+    symbol: "WETH9",
+    decimal: 18,
+    name: "Wrapped Ether",
+    availableChains: [
+      {
+        chain: Localhost,
+        contract: "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+      },
+    ],
+  },
+  "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9": {
+    icon: null,
+    symbol: "MTK",
+    decimal: 18,
+    name: "MyToken",
+    availableChains: [
+      {
+        chain: Sepolia,
+        contract: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+      },
+    ],
+  },
+
 };

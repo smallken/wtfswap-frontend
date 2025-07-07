@@ -1,10 +1,15 @@
 import React from "react";
-import { Flex, Table, Space, Typography, Button } from "antd";
+import { Flex, Table, Space, Typography, Button, message } from "antd";
 import type { TableProps } from "antd";
 import WtfLayout from "../../components/WtfLayout";
 import AddPositionModal from "../../components/AddPositionModal";
 import styles from "../css/positions.module.css";
 // import { AddressWithCopy, BigNumberWithCopy } from "../components/common";
+import { useReadPositionManagerGetAllPositions,useWriteErc20Approve,
+ useWritePositionManagerMint } from "@/utils/contracts";
+import { getContractAddress } from "@/utils/common";
+import { useAccount } from "@ant-design/web3";
+
 
 const columns: TableProps["columns"] = [
   {
@@ -101,29 +106,45 @@ const columns: TableProps["columns"] = [
 ];
 
 
-
+// 处理金额转换的辅助函数
+const toBigInt = (value: any): bigint => {
+  if (typeof value === 'bigint') {
+    return value; // 如果已经是 bigint，直接返回
+  }
+  
+  if (typeof value === 'string') {
+    // 处理十六进制字符串
+    if (value.startsWith('0x')) {
+      return BigInt(value);
+    }
+    // 处理普通数字字符串
+    return BigInt(Number(value));
+  }
+  
+  if (typeof value === 'number') {
+    return BigInt(value);
+  }
+  
+  // 如果是 BigInt 对象，转换为原始 bigint
+  if (value instanceof BigInt) {
+    return value.valueOf();
+  }
+  
+  // 其他情况尝试转换
+  return BigInt(value.toString());
+};
 
 
 const PoolListTable: React.FC = () => {
   // const data: readonly any[] | undefined = [];
   const [openAddPositionModal, setOpenAddPositionModal] = React.useState(false);
-  const data = [
-  {
-    owner: "0x1234567890abcdef1234567890abcdef12345678",
-    token0: "0x1234567890abcdef1234567890abcdef12345678",
-    token1: "0x1234567890abcdef1234567890abcdef12345678",
-    index: 0,
-    fee: 3000,
-    liquidity: BigInt(1234560000000),
-    tickLower: -123456,
-    tickUpper: 123456,
-    tokensOwed0: BigInt(123456),
-    tokensOwed1: BigInt(654321),
-    feeGrowthInside0LastX128: BigInt(123456),
-    feeGrowthInside1LastX128: BigInt(654321),
-  },
-];
-
+  const [loading, setLoading] = React.useState(false);
+  const { account } = useAccount();
+   const { data = [], refetch } = useReadPositionManagerGetAllPositions({
+   address: getContractAddress("PositionManager"),
+ });
+const { writeContractAsync } = useWritePositionManagerMint();
+  const { writeContractAsync: writeErc20Approve } = useWriteErc20Approve();
   return (
     <>
     <Table
@@ -132,6 +153,7 @@ const PoolListTable: React.FC = () => {
           <div>My Positions</div>
           <Space>
             <Button type="primary"
+            loading={loading}
              onClick={() => {
                   setOpenAddPositionModal(true);
                 }}
@@ -148,9 +170,49 @@ const PoolListTable: React.FC = () => {
         onCancel={() => {
           setOpenAddPositionModal(false);
         }}
-        onCreatePosition={(createPram) => {
-          console.log("get createPram", createPram);
+        onCreatePosition={ async (createParams) => {
+          console.log("get createPrams", createParams);
+          if (account?.address === undefined) {
+            message.error("Please connect wallet first");
+            return;
+          }
           setOpenAddPositionModal(false);
+          setLoading(true);
+          try {
+            await writeErc20Approve({
+              address: createParams.token0 as `0x${string}`, // 修复类型
+              args: [
+                getContractAddress("PositionManager"),
+                toBigInt(createParams.amount0Desired),
+              ],
+            });
+            await writeErc20Approve({
+              address: createParams.token1 as `0x${string}`,
+              args: [
+                getContractAddress("PositionManager"),
+                toBigInt(createParams.amount1Desired),
+              ],
+            });
+            await writeContractAsync({
+              address: getContractAddress("PositionManager"),
+              args: [
+                {
+                  token0: createParams.token0 as `0x${string}`,
+                  token1: createParams.token1 as `0x${string}`,
+                  index: createParams.index,
+                  amount0Desired: toBigInt(createParams.amount0Desired),
+                  amount1Desired: toBigInt(createParams.amount1Desired),
+                  recipient: account?.address as `0x${string}`,
+                  deadline: toBigInt(createParams.deadline),
+                },
+              ],
+            });
+            refetch();
+          } catch (error: any) {
+            message.error(error.message);
+          } finally {
+            setLoading(false);
+          }
         }}
       />
     </>
