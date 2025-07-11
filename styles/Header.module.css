@@ -1,0 +1,66 @@
+/* styles/Header.module.css */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 32px;
+  background-color: #ffffff;
+  color: #212529;
+  border-bottom: 1px solid #dee2e6;
+  height: 72px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0d6efd; /* 品牌色 */
+}
+
+.nav {
+  display: flex;
+  gap: 32px;
+}
+
+.nav a {
+  position: relative;
+  padding: 8px 0;
+  color: #495057;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav a:hover {
+  color: #0d6efd;
+}
+
+.nav a.active {
+  font-weight: 600;
+  color: #0d6efd;
+}
+
+.nav a.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #0d6efd;
+}
+
+.connectButton {
+  padding: 8px 16px;
+  border: 1px solid #0d6efd !important;
+  border-radius: 8px !important;
+  background-color: rgba(13, 110, 253, 0.1) !important;
+  color: #0d6efd !important;
+  font-weight: 500 !important;
+  transition: all 0.2s !important;
+}
+
+.connectButton:hover {
+  background-color: rgba(13, 110, 253, 0.2) !important;
+}

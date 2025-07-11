@@ -1,21 +1,28 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
+// lib/openzeppelin-contracts/contracts/
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 
-contract MyTokenTwo is ERC721, Ownable {
-  uint256 private _nextTokenId = 0;
+contract MyTokenTwo is ERC20Permit {
+    using Address for address;
 
-  constructor()
-    ERC721("MyToken", "MTK")
-    Ownable(msg.sender)
-  {}
+    address owner;
 
-  function mint(uint256 quantity) public payable {
-    require(quantity == 1, "quantity must be 1");
-    require(msg.value == 0.01 ether, "must pay 0.01 ether");
-    uint256 tokenId = _nextTokenId++;
-    _mint(msg.sender, tokenId);
-  }
+    constructor() ERC20("Kitty", "KTY") ERC20Permit("Kitty") {
+        _mint(msg.sender, 100000000 * 10 ** 18);
+        owner = msg.sender;
+    }
+
+
+    function mint(address to, uint256 amount) external {
+        _mint(to, amount);
+    }
+
+    function getBlockNumber() virtual internal view returns (uint) {
+        return block.number;
+    }
+
 }

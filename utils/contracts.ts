@@ -3210,62 +3210,81 @@ export const myTokenAbi = [
 
 export const myTokenTwoAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'nonpayable' },
+  { type: 'error', inputs: [], name: 'ECDSAInvalidSignature' },
+  {
+    type: 'error',
+    inputs: [{ name: 'length', internalType: 'uint256', type: 'uint256' }],
+    name: 'ECDSAInvalidSignatureLength',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 's', internalType: 'bytes32', type: 'bytes32' }],
+    name: 'ECDSAInvalidSignatureS',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'allowance', internalType: 'uint256', type: 'uint256' },
+      { name: 'needed', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'ERC20InsufficientAllowance',
+  },
   {
     type: 'error',
     inputs: [
       { name: 'sender', internalType: 'address', type: 'address' },
-      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
-      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'balance', internalType: 'uint256', type: 'uint256' },
+      { name: 'needed', internalType: 'uint256', type: 'uint256' },
     ],
-    name: 'ERC721IncorrectOwner',
-  },
-  {
-    type: 'error',
-    inputs: [
-      { name: 'operator', internalType: 'address', type: 'address' },
-      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'ERC721InsufficientApproval',
+    name: 'ERC20InsufficientBalance',
   },
   {
     type: 'error',
     inputs: [{ name: 'approver', internalType: 'address', type: 'address' }],
-    name: 'ERC721InvalidApprover',
-  },
-  {
-    type: 'error',
-    inputs: [{ name: 'operator', internalType: 'address', type: 'address' }],
-    name: 'ERC721InvalidOperator',
-  },
-  {
-    type: 'error',
-    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
-    name: 'ERC721InvalidOwner',
+    name: 'ERC20InvalidApprover',
   },
   {
     type: 'error',
     inputs: [{ name: 'receiver', internalType: 'address', type: 'address' }],
-    name: 'ERC721InvalidReceiver',
+    name: 'ERC20InvalidReceiver',
   },
   {
     type: 'error',
     inputs: [{ name: 'sender', internalType: 'address', type: 'address' }],
-    name: 'ERC721InvalidSender',
+    name: 'ERC20InvalidSender',
   },
   {
     type: 'error',
-    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
-    name: 'ERC721NonexistentToken',
+    inputs: [{ name: 'spender', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidSpender',
   },
   {
     type: 'error',
-    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
-    name: 'OwnableInvalidOwner',
+    inputs: [{ name: 'deadline', internalType: 'uint256', type: 'uint256' }],
+    name: 'ERC2612ExpiredSignature',
   },
   {
     type: 'error',
-    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
-    name: 'OwnableUnauthorizedAccount',
+    inputs: [
+      { name: 'signer', internalType: 'address', type: 'address' },
+      { name: 'owner', internalType: 'address', type: 'address' },
+    ],
+    name: 'ERC2612InvalidSigner',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'account', internalType: 'address', type: 'address' },
+      { name: 'currentNonce', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'InvalidAccountNonce',
+  },
+  { type: 'error', inputs: [], name: 'InvalidShortString' },
+  {
+    type: 'error',
+    inputs: [{ name: 'str', internalType: 'string', type: 'string' }],
+    name: 'StringTooLong',
   },
   {
     type: 'event',
@@ -3278,59 +3297,21 @@ export const myTokenTwoAbi = [
         indexed: true,
       },
       {
-        name: 'approved',
+        name: 'spender',
         internalType: 'address',
         type: 'address',
         indexed: true,
       },
       {
-        name: 'tokenId',
+        name: 'value',
         internalType: 'uint256',
         type: 'uint256',
-        indexed: true,
+        indexed: false,
       },
     ],
     name: 'Approval',
   },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'owner',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'operator',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      { name: 'approved', internalType: 'bool', type: 'bool', indexed: false },
-    ],
-    name: 'ApprovalForAll',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'previousOwner',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'newOwner',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'OwnershipTransferred',
-  },
+  { type: 'event', anonymous: false, inputs: [], name: 'EIP712DomainChanged' },
   {
     type: 'event',
     anonymous: false,
@@ -3338,54 +3319,79 @@ export const myTokenTwoAbi = [
       { name: 'from', internalType: 'address', type: 'address', indexed: true },
       { name: 'to', internalType: 'address', type: 'address', indexed: true },
       {
-        name: 'tokenId',
+        name: 'value',
         internalType: 'uint256',
         type: 'uint256',
-        indexed: true,
+        indexed: false,
       },
     ],
     name: 'Transfer',
   },
   {
     type: 'function',
-    inputs: [
-      { name: 'to', internalType: 'address', type: 'address' },
-      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'approve',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
-    name: 'balanceOf',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
-    name: 'getApproved',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    inputs: [],
+    name: 'DOMAIN_SEPARATOR',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
     stateMutability: 'view',
   },
   {
     type: 'function',
     inputs: [
       { name: 'owner', internalType: 'address', type: 'address' },
-      { name: 'operator', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
     ],
-    name: 'isApprovedForAll',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    name: 'allowance',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
   },
   {
     type: 'function',
-    inputs: [{ name: 'quantity', internalType: 'uint256', type: 'uint256' }],
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'approve',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'decimals',
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'eip712Domain',
+    outputs: [
+      { name: 'fields', internalType: 'bytes1', type: 'bytes1' },
+      { name: 'name', internalType: 'string', type: 'string' },
+      { name: 'version', internalType: 'string', type: 'string' },
+      { name: 'chainId', internalType: 'uint256', type: 'uint256' },
+      { name: 'verifyingContract', internalType: 'address', type: 'address' },
+      { name: 'salt', internalType: 'bytes32', type: 'bytes32' },
+      { name: 'extensions', internalType: 'uint256[]', type: 'uint256[]' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
     name: 'mint',
     outputs: [],
-    stateMutability: 'payable',
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -3396,64 +3402,25 @@ export const myTokenTwoAbi = [
   },
   {
     type: 'function',
-    inputs: [],
-    name: 'owner',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'nonces',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
   },
   {
     type: 'function',
-    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
-    name: 'ownerOf',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'renounceOwnership',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
     inputs: [
-      { name: 'from', internalType: 'address', type: 'address' },
-      { name: 'to', internalType: 'address', type: 'address' },
-      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+      { name: 'deadline', internalType: 'uint256', type: 'uint256' },
+      { name: 'v', internalType: 'uint8', type: 'uint8' },
+      { name: 'r', internalType: 'bytes32', type: 'bytes32' },
+      { name: 's', internalType: 'bytes32', type: 'bytes32' },
     ],
-    name: 'safeTransferFrom',
+    name: 'permit',
     outputs: [],
     stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'from', internalType: 'address', type: 'address' },
-      { name: 'to', internalType: 'address', type: 'address' },
-      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
-      { name: 'data', internalType: 'bytes', type: 'bytes' },
-    ],
-    name: 'safeTransferFrom',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'operator', internalType: 'address', type: 'address' },
-      { name: 'approved', internalType: 'bool', type: 'bool' },
-    ],
-    name: 'setApprovalForAll',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'interfaceId', internalType: 'bytes4', type: 'bytes4' }],
-    name: 'supportsInterface',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -3464,27 +3431,30 @@ export const myTokenTwoAbi = [
   },
   {
     type: 'function',
-    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
-    name: 'tokenURI',
-    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transfer',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     inputs: [
       { name: 'from', internalType: 'address', type: 'address' },
       { name: 'to', internalType: 'address', type: 'address' },
-      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
     ],
     name: 'transferFrom',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'newOwner', internalType: 'address', type: 'address' }],
-    name: 'transferOwnership',
-    outputs: [],
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
     stateMutability: 'nonpayable',
   },
 ] as const
@@ -7943,6 +7913,23 @@ export const useReadMyTokenTwo = /*#__PURE__*/ createUseReadContract({
 })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"DOMAIN_SEPARATOR"`
+ */
+export const useReadMyTokenTwoDomainSeparator =
+  /*#__PURE__*/ createUseReadContract({
+    abi: myTokenTwoAbi,
+    functionName: 'DOMAIN_SEPARATOR',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"allowance"`
+ */
+export const useReadMyTokenTwoAllowance = /*#__PURE__*/ createUseReadContract({
+  abi: myTokenTwoAbi,
+  functionName: 'allowance',
+})
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"balanceOf"`
  */
 export const useReadMyTokenTwoBalanceOf = /*#__PURE__*/ createUseReadContract({
@@ -7951,19 +7938,20 @@ export const useReadMyTokenTwoBalanceOf = /*#__PURE__*/ createUseReadContract({
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"getApproved"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"decimals"`
  */
-export const useReadMyTokenTwoGetApproved = /*#__PURE__*/ createUseReadContract(
-  { abi: myTokenTwoAbi, functionName: 'getApproved' },
-)
+export const useReadMyTokenTwoDecimals = /*#__PURE__*/ createUseReadContract({
+  abi: myTokenTwoAbi,
+  functionName: 'decimals',
+})
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"isApprovedForAll"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"eip712Domain"`
  */
-export const useReadMyTokenTwoIsApprovedForAll =
+export const useReadMyTokenTwoEip712Domain =
   /*#__PURE__*/ createUseReadContract({
     abi: myTokenTwoAbi,
-    functionName: 'isApprovedForAll',
+    functionName: 'eip712Domain',
   })
 
 /**
@@ -7975,29 +7963,12 @@ export const useReadMyTokenTwoName = /*#__PURE__*/ createUseReadContract({
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"owner"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"nonces"`
  */
-export const useReadMyTokenTwoOwner = /*#__PURE__*/ createUseReadContract({
+export const useReadMyTokenTwoNonces = /*#__PURE__*/ createUseReadContract({
   abi: myTokenTwoAbi,
-  functionName: 'owner',
+  functionName: 'nonces',
 })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"ownerOf"`
- */
-export const useReadMyTokenTwoOwnerOf = /*#__PURE__*/ createUseReadContract({
-  abi: myTokenTwoAbi,
-  functionName: 'ownerOf',
-})
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"supportsInterface"`
- */
-export const useReadMyTokenTwoSupportsInterface =
-  /*#__PURE__*/ createUseReadContract({
-    abi: myTokenTwoAbi,
-    functionName: 'supportsInterface',
-  })
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"symbol"`
@@ -8008,12 +7979,11 @@ export const useReadMyTokenTwoSymbol = /*#__PURE__*/ createUseReadContract({
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"tokenURI"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"totalSupply"`
  */
-export const useReadMyTokenTwoTokenUri = /*#__PURE__*/ createUseReadContract({
-  abi: myTokenTwoAbi,
-  functionName: 'tokenURI',
-})
+export const useReadMyTokenTwoTotalSupply = /*#__PURE__*/ createUseReadContract(
+  { abi: myTokenTwoAbi, functionName: 'totalSupply' },
+)
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link myTokenTwoAbi}__
@@ -8039,31 +8009,20 @@ export const useWriteMyTokenTwoMint = /*#__PURE__*/ createUseWriteContract({
 })
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"renounceOwnership"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"permit"`
  */
-export const useWriteMyTokenTwoRenounceOwnership =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: myTokenTwoAbi,
-    functionName: 'renounceOwnership',
-  })
+export const useWriteMyTokenTwoPermit = /*#__PURE__*/ createUseWriteContract({
+  abi: myTokenTwoAbi,
+  functionName: 'permit',
+})
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"safeTransferFrom"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"transfer"`
  */
-export const useWriteMyTokenTwoSafeTransferFrom =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: myTokenTwoAbi,
-    functionName: 'safeTransferFrom',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"setApprovalForAll"`
- */
-export const useWriteMyTokenTwoSetApprovalForAll =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: myTokenTwoAbi,
-    functionName: 'setApprovalForAll',
-  })
+export const useWriteMyTokenTwoTransfer = /*#__PURE__*/ createUseWriteContract({
+  abi: myTokenTwoAbi,
+  functionName: 'transfer',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"transferFrom"`
@@ -8072,15 +8031,6 @@ export const useWriteMyTokenTwoTransferFrom =
   /*#__PURE__*/ createUseWriteContract({
     abi: myTokenTwoAbi,
     functionName: 'transferFrom',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"transferOwnership"`
- */
-export const useWriteMyTokenTwoTransferOwnership =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: myTokenTwoAbi,
-    functionName: 'transferOwnership',
   })
 
 /**
@@ -8109,30 +8059,21 @@ export const useSimulateMyTokenTwoMint =
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"renounceOwnership"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"permit"`
  */
-export const useSimulateMyTokenTwoRenounceOwnership =
+export const useSimulateMyTokenTwoPermit =
   /*#__PURE__*/ createUseSimulateContract({
     abi: myTokenTwoAbi,
-    functionName: 'renounceOwnership',
+    functionName: 'permit',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"safeTransferFrom"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"transfer"`
  */
-export const useSimulateMyTokenTwoSafeTransferFrom =
+export const useSimulateMyTokenTwoTransfer =
   /*#__PURE__*/ createUseSimulateContract({
     abi: myTokenTwoAbi,
-    functionName: 'safeTransferFrom',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"setApprovalForAll"`
- */
-export const useSimulateMyTokenTwoSetApprovalForAll =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: myTokenTwoAbi,
-    functionName: 'setApprovalForAll',
+    functionName: 'transfer',
   })
 
 /**
@@ -8142,15 +8083,6 @@ export const useSimulateMyTokenTwoTransferFrom =
   /*#__PURE__*/ createUseSimulateContract({
     abi: myTokenTwoAbi,
     functionName: 'transferFrom',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link myTokenTwoAbi}__ and `functionName` set to `"transferOwnership"`
- */
-export const useSimulateMyTokenTwoTransferOwnership =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: myTokenTwoAbi,
-    functionName: 'transferOwnership',
   })
 
 /**
@@ -8169,21 +8101,12 @@ export const useWatchMyTokenTwoApprovalEvent =
   })
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link myTokenTwoAbi}__ and `eventName` set to `"ApprovalForAll"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link myTokenTwoAbi}__ and `eventName` set to `"EIP712DomainChanged"`
  */
-export const useWatchMyTokenTwoApprovalForAllEvent =
+export const useWatchMyTokenTwoEip712DomainChangedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
     abi: myTokenTwoAbi,
-    eventName: 'ApprovalForAll',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link myTokenTwoAbi}__ and `eventName` set to `"OwnershipTransferred"`
- */
-export const useWatchMyTokenTwoOwnershipTransferredEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: myTokenTwoAbi,
-    eventName: 'OwnershipTransferred',
+    eventName: 'EIP712DomainChanged',
   })
 
 /**

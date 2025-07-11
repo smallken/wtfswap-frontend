@@ -1,9 +1,9 @@
 :root {
   --max-width: 1100px;
   --border-radius: 12px;
-  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
-    'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
-    'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
+    "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
+    "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
 
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -82,6 +82,7 @@
 html,
 body {
   max-width: 100vw;
+  min-height: 100vh;
   overflow-x: hidden;
 }
 
@@ -104,58 +105,4 @@ a {
   html {
     color-scheme: dark;
   }
-}
-
-
-
-/* 地址和数字复制组件的通用样式 */
-.address-with-copy, .big-number-with-copy {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.address-tag {
-  max-width: 150px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  padding: 2px 8px;
-  font-size: 12px;
-}
-
-.big-number-display {
-  font-family: 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
-  font-size: 12px;
-  padding: 2px 6px;
-  background: #f0f7ff;
-  border-radius: 4px;
-  display: inline-block;
-}
-
-.copy-button {
-  color: #1677ff;
-  opacity: 0.7;
-  transition: opacity 0.2s;
-}
-
-.copy-button:hover {
-  opacity: 1;
-  color: #0050b3;
-}
-
-/* 大数字的科学记数法样式 */
-.big-number-notation {
-  font-family: 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
-}
-
-.number-separator {
-  color: #666;
-  font-size: 0.9em;
-  padding: 0 1px;
-}
-
-.number-exponent {
-  color: #666;
-  font-size: 0.9em;
 }

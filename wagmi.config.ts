@@ -6,7 +6,7 @@ export default defineConfig({
   out: "utils/contracts.ts",
   plugins: [
     hardhat({
-      project: "../wtfswap-frontend",
+      project: "../swap-frontend",
     }),
     react(),
   ],
