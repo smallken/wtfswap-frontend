@@ -7,7 +7,7 @@ import headerStyles from '@/styles/Header.module.css';
 
 export default function WtfHeader() {
   const pathname = usePathname();
-  const isSwapPage = pathname === "/wtfswap";
+  const isSwapPage = pathname === "/swap";
   const isPoolPage = pathname === "/swap/pool";
   const [loading, setLoading] = React.useState(true);
 

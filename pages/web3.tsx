@@ -110,22 +110,22 @@ const CallTest = () => {
       {result.data?.toString()}
       <Button
         onClick={() => {
-          mintNFT(
-            {
-              address: contractInfo.find((item) => item.id === chain?.id)
-                ?.contractAddress as `0x${string}`,
-              args: [BigInt(1)],
-              value: parseEther("0.01"),
-            },
-            {
-              onSuccess: () => {
-                message.success("Mint Success");
-              },
-              onError: (err) => {
-                message.error(err.message);
-              },
-            }
-          );
+          // mintNFT(
+          //   {
+          //     address: contractInfo.find((item) => item.id === chain?.id)
+          //       ?.contractAddress as `0x${string}`,
+          //     args: [BigInt(1)],
+          //     value: parseEther("0.01"),
+          //   },
+          //   {
+          //     onSuccess: () => {
+          //       message.success("Mint Success");
+          //     },
+          //     onError: (err) => {
+          //       message.error(err.message);
+          //     },
+          //   }
+          // );
         }}
       >
         mint

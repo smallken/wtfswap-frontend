@@ -12,7 +12,7 @@ import styles from "./swap.module.css";
 
 import { usePublicClient } from "wagmi";
 import { swapRouterAbi } from "@/utils/contracts";
-
+import Link from "next/link";
 import {
   useReadPoolManagerGetPairs,
   useReadIPoolManagerGetAllPools,
@@ -28,6 +28,14 @@ import {
   parseAmountToBigInt,
   parseBigIntToAmount,
 } from "@/utils/common";
+
+
+// 创建 FaucetIcon 组件
+const FaucetIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M5 12H19M5 12C3.89543 12 3 11.1046 3 10V6C3 4.89543 3.89543 4 5 4H19C20.1046 4 21 4.89543 21 6V10C21 11.1046 20.1046 12 19 12M5 12V18C5 19.1046 5.89543 20 7 20H17C18.1046 20 19 19.1046 19 18V12M9 8H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
 const { Text } = Typography;
 
@@ -118,6 +126,11 @@ function Swap() {
       isNaN(parseFloat(inputValue))) {
       return;
     }
+    if (tokenAddressA === tokenAddressB) {
+      message.error("Please select different tokens");
+      return;
+    }
+
     console.log("--- 开始计算 ---");
     console.log("输入模式:", isInputMode ? "输入" : "输出");
     console.log("代币A:", tokenA?.symbol, "小数位:", tokenA?.decimal);
@@ -387,7 +400,17 @@ function Swap() {
       >
         {calculating ? "Calculating..." : "Swap"}
       </Button>
-      <Faucet />
+      <div className={styles.faucetContainer}>
+  <Link href="/swap/debug">
+    <Button 
+      type="dashed" 
+      className={styles.faucetButton}
+      icon={<FaucetIcon />} // 添加一个图标使按钮更直观
+    >
+      Get Test Coins
+    </Button>
+  </Link>
+</div>
     </Card>
   );
 }

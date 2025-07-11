@@ -32,37 +32,38 @@ export const getContractAddress = (
   const isProd = process.env.NODE_ENV === "production";
   if (contract === "PoolManager") {
     return isProd
-      ? "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+      ? "0xE0Cef47B0a9bbEfD7A4Fd16e437aFC638DA1Bbd4"
       : "0x5FbDB2315678afecb367f032d93F642f64180aa3";
   }
   if (contract === "PositionManager") {
     return isProd
-      ? "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+      ? "0xeB5F202067ee1E8699466C7cB0b233655220aAe5"
       : "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
   }
   if (contract === "SwapRouter") {
     return isProd
-      ? "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
+      ? "0x5Cc568911d45af9D037727c1BeFb05fDC02dA8Df"
       : "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
   }
   if (contract === "MyToken") {
     return isProd
-      ? "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
+      ? "0x7741b9AEe8A3354a998677dbe3f0B1AC6964eCA0"
       : "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
   }
   if (contract === "MyTokenTwo") {
     return isProd
-      ? "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
+      ? "0xD745BCAf32B3FE48ef68CaaEfd2d7d57F0dC72a7"
       : "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9";
   }
   if (contract === "USDT") {
     return isProd
-      ? "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"
+      ? "0x323e78f944A9a1FcF3a10efcC5319DBb0bB6e673"
       : "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
   }
   if (contract === "WETH9") {
     return isProd
-      ? "0x0165878A594ca255338adfa4d48449f69242Eb8F"
+    // avae部署的链：
+      ? "0xd0df82de051244f04bff3a8bb1f62e1cd39eed92"
       : "0x0165878A594ca255338adfa4d48449f69242Eb8F";
   }
   throw new Error("Invalid contract");
@@ -78,6 +79,18 @@ const builtInTokens: Record<string, Token> = {
       {
         chain: Localhost,
         contract: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+      }   
+    ],
+  },
+  "0x7741b9AEe8A3354a998677dbe3f0B1AC6964eCA0": {
+    icon: null,
+    symbol: "DRG",
+    decimal: 18,
+    name: "Dragon",
+    availableChains: [
+      {
+        chain: Sepolia,
+        contract: "0x7741b9AEe8A3354a998677dbe3f0B1AC6964eCA0",
       },
     ],
   },
@@ -90,6 +103,18 @@ const builtInTokens: Record<string, Token> = {
       {
         chain: Localhost,
         contract: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+      }
+    ],
+  },
+  "0xD745BCAf32B3FE48ef68CaaEfd2d7d57F0dC72a7": {
+    icon: null,
+    symbol: "MTK",
+    decimal: 18,
+    name: "MyToken",
+    availableChains: [
+      {
+        chain: Sepolia,
+        contract: "0xD745BCAf32B3FE48ef68CaaEfd2d7d57F0dC72a7",
       },
     ],
   },
@@ -102,7 +127,19 @@ const builtInTokens: Record<string, Token> = {
       {
         chain: Localhost,
         contract: "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
-      },
+      }
+    ],
+  },
+  "0x323e78f944A9a1FcF3a10efcC5319DBb0bB6e673": {
+    icon: null,
+    symbol: "USDT",
+    decimal: 6,
+    name: "Tether USD",
+    availableChains: [
+      {
+        chain: Sepolia,
+        contract: "0x323e78f944A9a1FcF3a10efcC5319DBb0bB6e673",
+      }
     ],
   },
   "0x0165878A594ca255338adfa4d48449f69242Eb8F": {
@@ -117,7 +154,20 @@ const builtInTokens: Record<string, Token> = {
       },
     ],
   },
+  "0xd0df82de051244f04bff3a8bb1f62e1cd39eed92": {
+    icon: null,
+    symbol: "WETH9",
+    decimal: 18,
+    name: "Wrapped Ether",
+    availableChains: [
+      {
+        chain: Sepolia,
+        contract: "0xd0df82de051244f04bff3a8bb1f62e1cd39eed92",
+      },
+    ],
+  },
 };
+
 
 export const getTokenInfo = (address: string): Token => {
   if (builtInTokens[address]) {
