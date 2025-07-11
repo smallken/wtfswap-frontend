@@ -2,6 +2,8 @@ import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
+import Link from "next/link";
+import { Button } from "antd";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,85 +20,73 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
-        <div className={styles.description}>
-          <p>WTF Academy DApp 极简入门教程，帮助开发者入门去中心应用开发。</p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{" "}
-              <Image
-                src="/wtf.png"
-                alt="ETF Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={42}
-                priority
-              />
-            </a>
-          </div>
+        {/* 修改1: 添加居中容器和样式 */}
+        <div className={styles.description} style={{ textAlign: "center" }}>
+          <p style={{ margin: "8px 0" }}>Only DRG and MTK exchange is supported.</p>
+          <p style={{ margin: "8px 0" }}>You can claim test coins for testing.</p>
+          <p style={{ margin: "8px 0" }}>You can also add pools by yourself and increase liquidity.</p>
         </div>
 
         <div className={styles.center}>
           <Image
             className={styles.logo}
-            src="/wtf-antdweb3.png"
-            alt="wtf antdweb3 Logo"
+            src="/swap.png"
+            alt="swap"
             width={689}
             height={412}
             priority
           />
         </div>
 
-        <div className={styles.grid}>
+        {/* 修改2: 添加卡片居中容器 */}
+        <div 
+          className={styles.grid} 
+          style={{ 
+            display: "flex", 
+            justifyContent: "center",
+            flexWrap: "wrap",
+            maxWidth: "1200px",
+            margin: "0 auto"
+          }}
+        >
           <a
-            href="https://github.com/WTFAcademy/WTF-Dapp"
+            href="https://github.com/smallken/wtfswap-frontend"
             className={styles.card}
             target="_blank"
             rel="noopener noreferrer"
+            style={{ textAlign: "center" }}
           >
-            <h2>
+            <h2 style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
               Github <span>-&gt;</span>
             </h2>
-            <p>前往 Github 获取教程</p>
+            <p>Github</p>
           </a>
 
-          <a
-            href="https://www.wtf.academy/"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              More <span>-&gt;</span>
-            </h2>
-            <p>获取更多 WTF Academy 课程</p>
-          </a>
-
-          <a
+          <Link
             href="/swap"
             className={styles.card}
-            target="_blank"
+            target="_self"
             rel="noopener noreferrer"
           >
-            <h2>
-              Wtfswap <span>-&gt;</span>
-            </h2>
-            <p>访问课程 Wtfswap Demo</p>
-          </a>
+            <a style={{ textAlign: "center" }}>
+              <h2 style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                Go to swap! <span>-&gt;</span>
+              </h2>
+              <p>Have fun!</p>
+            </a>
+          </Link>
 
           <a
             href="https://web3.ant.design/"
             className={styles.card}
             target="_blank"
             rel="noopener noreferrer"
+            style={{ textAlign: "center" }}
           >
-            <h2>
+            <h2 style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
               Ant Design Web3 <span>-&gt;</span>
             </h2>
-            <p>了解 Ant Design Web3</p>
+            <p>Know about Ant Design Web3</p>
           </a>
         </div>
       </main>
